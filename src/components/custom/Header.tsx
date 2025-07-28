@@ -13,7 +13,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <div className="flex items-center justify-between py-4 px-8">
+    <header className="flex items-center justify-between mb-4">
       <div className="relative">
         <input
           type="search"
@@ -84,6 +84,6 @@ export default function Header() {
             </Button>
           </div> */}
       </div>
-    </div>
+    </header>
   );
 }

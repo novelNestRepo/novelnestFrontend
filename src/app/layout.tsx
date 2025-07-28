@@ -3,6 +3,8 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import Sidebar from "@/components/custom/Sidebar";
+import Header from "@/components/custom/Header";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
@@ -30,7 +32,9 @@ export default function RootLayout({
         className={`${playfairDisplay.variable} ${inter.variable} antialiased`}
       >
         <TooltipProvider>
-          <main>
+        <Sidebar />
+        <main className="ml-20 flex flex-col py-4 px-4 *:w-full border">
+          <Header />
             {children}
             <Toaster />
           </main>
