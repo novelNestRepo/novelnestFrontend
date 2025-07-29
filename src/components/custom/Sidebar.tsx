@@ -1,3 +1,5 @@
+// TODO: Responsive.
+
 "use client";
 
 import {
@@ -12,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 const SidebarItem = ({
   icon: Icon,
@@ -58,8 +61,16 @@ export default function Sidebar() {
   const settings = () => router.push("/settings");
 
   return (
-    <div className="fixed left-0 top-0 bottom-0 w-[80px] flex flex-col items-center justify-center py-4 bg-background border-r border-border">
-      <Image src="/novelnest.png" width="64" height="64" alt="Logo" className="rounded cursor-pointer" />
+    <div className="fixed left-0 top-0 bottom-0 w-[96px] flex flex-col items-center justify-center py-4 bg-background border-r border-border">
+      <Link href="/">
+        <Image
+          src="/novelnest.png"
+          width="64"
+          height="64"
+          alt="Logo"
+          className="cursor-pointer"
+        />
+      </Link>
       <div className="flex flex-col items-center flex-1">
         <SidebarItem
           icon={Home}

@@ -1,3 +1,5 @@
+// TODO: Reponsive.
+
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
@@ -32,9 +34,9 @@ export default function RootLayout({
         className={`${playfairDisplay.variable} ${inter.variable} antialiased`}
       >
         <TooltipProvider>
-        <Sidebar />
-        <main className="ml-20 flex flex-col py-4 px-4 *:w-full border">
-          <Header />
+          <Sidebar />
+          <main className="ml-24 flex flex-col py-4 px-8 *:w-full border">
+            <Header />
             {children}
             <Toaster />
           </main>
