@@ -13,7 +13,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="flex items-center justify-between mb-4">
+    <header className="flex items-center justify-between mb-8">
       <div className="relative">
         <input
           type="search"

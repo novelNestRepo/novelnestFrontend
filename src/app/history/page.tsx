@@ -32,7 +32,7 @@ const History = () => {
       <PageTitle title="Reading History" icon={<Clock />} />
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <Card>
           <CardContent className="p-4 flex flex-col items-center justify-center">
             <h2 className="text-3xl font-bold text-primary">18,456</h2>
