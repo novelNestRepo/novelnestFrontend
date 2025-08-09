@@ -1,7 +1,7 @@
 import React from "react";
 import BookmarkCard from "./BookmarkCard";
 
-const BookmarksGrid = ({ bookmarks, tab }) => {
+const BooksGrid = ({ bookmarks, tab }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {tab === "all" &&
@@ -48,4 +48,4 @@ const BookmarksGrid = ({ bookmarks, tab }) => {
   );
 };
 
-export default BookmarksGrid;
+export default BooksGrid;

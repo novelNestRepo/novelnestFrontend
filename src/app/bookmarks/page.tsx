@@ -3,7 +3,7 @@
 
 "use client";
 
-import BookmarksGrid from "@/components/custom/BookmarksGrid";
+import BooksGrid from "@/components/custom/BooksGrid";
 import PageTitle from "@/components/custom/PageTitle";
 import {
   Pagination,
@@ -107,7 +107,7 @@ const page = () => {
         </div>
 
         <TabsContent value="all">
-          <BookmarksGrid bookmarks={bookmarks} tab="all" />
+          <BooksGrid bookmarks={bookmarks} tab="all" />
           <Pagination className="mt-4">
             <PaginationContent>
               <PaginationItem>
@@ -132,7 +132,7 @@ const page = () => {
         </TabsContent>
 
         <TabsContent value="recent">
-          <BookmarksGrid bookmarks={bookmarks} tab="recent" />
+          <BooksGrid bookmarks={bookmarks} tab="recent" />
           <Pagination className="mt-4">
             <PaginationContent>
               <PaginationItem>
@@ -157,7 +157,7 @@ const page = () => {
         </TabsContent>
 
         <TabsContent value="favorites">
-          <BookmarksGrid bookmarks={bookmarks} tab="favorites" />
+          <BooksGrid bookmarks={bookmarks} tab="favorites" />
           <Pagination className="mt-4">
             <PaginationContent>
               <PaginationItem>

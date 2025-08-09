@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         <TooltipProvider>
           <Sidebar />
-          <main className="ml-24 flex flex-col py-4 px-8 *:w-full">
+          <main className="ml-24 flex flex-col py-4 px-8 *:w-full h-screen">
             <Header />
             {children}
             <Toaster />
