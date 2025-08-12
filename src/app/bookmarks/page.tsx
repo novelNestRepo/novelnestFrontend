@@ -3,6 +3,7 @@
 
 "use client";
 
+import BookmarkedBooksGrid from "@/components/custom/BookmarkedBooksGrid";
 import BooksGrid from "@/components/custom/BooksGrid";
 import PageTitle from "@/components/custom/PageTitle";
 import {
@@ -14,15 +15,16 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Book } from "@/lib/types";
 import { Bookmark } from "lucide-react";
 import React, { useState } from "react";
 
 const page = () => {
   const [activeTab, setActiveTab] = useState("all");
 
-  const bookmarks = [
+  const bookmarks: Book[] = [
     {
-      id: 1,
+      id: "1",
       title: "The Adventures of Sherlock Holmes",
       author: "Arthur Conan Doyle",
       coverUrl: "https://m.media-amazon.com/images/I/71tvs98+5vL.jpg",
@@ -32,7 +34,7 @@ const page = () => {
       favorite: true,
     },
     {
-      id: 2,
+      id: "2",
       title: "Fire & Blood",
       author: "George R.R. Martin",
       coverUrl:
@@ -43,7 +45,7 @@ const page = () => {
       recent: true,
     },
     {
-      id: 3,
+      id: "3",
       title: "The Midnight Library",
       author: "Matt Haig",
       coverUrl:
@@ -54,7 +56,7 @@ const page = () => {
       favorite: true,
     },
     {
-      id: 4,
+      id: "4",
       title: "The Philosopher's Stone",
       author: "J.K. Rowling",
       coverUrl:
@@ -65,7 +67,7 @@ const page = () => {
       recent: true,
     },
     {
-      id: 5,
+      id: "5",
       title: "A Game of Thrones",
       author: "George R.R. Martin",
       coverUrl:
@@ -75,7 +77,7 @@ const page = () => {
       note: "Ned Stark discovers the truth about the royal children",
     },
     {
-      id: 6,
+      id: "6",
       title: "The Hobbit",
       author: "J.R.R. Tolkien",
       coverUrl:
@@ -85,6 +87,7 @@ const page = () => {
       note: "Riddles in the dark with Gollum",
     },
   ];
+
   return (
     <>
       <PageTitle title="Bookmarks" icon={<Bookmark />} />
@@ -106,58 +109,8 @@ const page = () => {
           </TabsList>
         </div>
 
-        <TabsContent value="all">
-          <BooksGrid bookmarks={bookmarks} tab="all" />
-          <Pagination className="mt-4">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" isActive>
-                  1
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">2</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </TabsContent>
-
-        <TabsContent value="recent">
-          <BooksGrid bookmarks={bookmarks} tab="recent" />
-          <Pagination className="mt-4">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious href="#" />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#" isActive>
-                  1
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">2</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext href="#" />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </TabsContent>
-
-        <TabsContent value="favorites">
-          <BooksGrid bookmarks={bookmarks} tab="favorites" />
+        <TabsContent value={activeTab}>
+          <BookmarkedBooksGrid bookmarks={bookmarks} tab={activeTab} />
           <Pagination className="mt-4">
             <PaginationContent>
               <PaginationItem>

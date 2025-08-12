@@ -18,10 +18,10 @@ export default function Header() {
         <input
           type="search"
           placeholder="Search book name, author, edition..."
-          className="w-[300px] bg-foreground/5 border-none rounded-full py-2 px-4 pl-10 text-sm outline-none focus:ring-1 focus:ring-primary/30"
+          className="w-[300px] bg-foreground/5 border-none rounded-full p-4 pl-10 text-sm outline-none focus:ring-1 focus:ring-primary/30"
         />
         <svg
-          className="absolute left-3 top-2.5 w-4 h-4 text-foreground/50"
+          className="absolute left-3 top-4.5 w-4 h-4 text-foreground/50"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -39,7 +39,7 @@ export default function Header() {
       <div className="flex items-center gap-4">
         <Link
           href="/voice-channels"
-          className="text-sm font-medium text-primary hover:underline"
+          className="text-sm font-medium text-primary hover:underline me-1"
         >
           Voice Channels
         </Link>
@@ -48,7 +48,10 @@ export default function Header() {
         </button>
 
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger
+            asChild
+            className="hover:bg-primary/8 active:bg-primary/8 p-2 rounded-4xl transition-all duration-100"
+          >
             <div className="flex items-center gap-2 cursor-pointer">
               <span className="text-sm font-medium">me@email.com</span>
               <Avatar>
@@ -59,17 +62,17 @@ export default function Header() {
               </Avatar>
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="center" className="w-full">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href="/profile">Profile</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href="/settings">Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-500">
+            <DropdownMenuItem className="text-red-500 cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>

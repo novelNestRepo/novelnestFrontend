@@ -213,7 +213,7 @@ export default function Messages() {
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-between items-center">
-        <PageTitle title="Bookmarks" icon={<MessageSquare />} />
+        <PageTitle title="Messages" icon={<MessageSquare />} />
         <Select value={selectedChannel} onValueChange={setSelectedChannel}>
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Select a channel" />

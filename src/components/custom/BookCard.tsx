@@ -1,44 +1,56 @@
-import { cn } from "@/lib/utils";
 import Image from "next/image";
-
-interface BookCardProps {
-  coverUrl: string;
-  title: string;
-  series?: string;
-  volume?: string;
-  className?: string;
-}
+import { Card, CardContent } from "../ui/card";
+import { Book } from "@/lib/types";
 
 export default function BookCard({
-  coverUrl,
   title,
-  series,
-  volume,
-  className,
-}: BookCardProps) {
+  author,
+  coverUrl,
+  pageNumber,
+  dateBookmarked,
+  note,
+  favorite = false,
+  description,
+}: Book) {
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
-      <div
-        className="relative overflow-hidden rounded-md shadow-md"
-        style={{ aspectRatio: "2/3" }}
-      >
-        <Image
-          src={coverUrl}
-          alt={title}
-          className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
-          width="200"
-          height="300"
-        ></Image>
-      </div>
-      <div className="text-left">
-        <h3 className="font-medium text-sm line-clamp-2">{title}</h3>
-        {(series || volume) && (
-          <p className="text-xs text-foreground/70">
-            {series && <span>{series} </span>}
-            {volume && <span>Volume {volume}</span>}
+    <Card className="overflow-hidden p-4">
+      <CardContent className="p-0 space-y-2">
+        <div className="flex gap-3 p-0 h-36">
+          <img
+            src={coverUrl}
+            alt={title}
+            className="w-24 h-32 object-cover rounded-sm"
+          />
+          <div className="flex-1 space-y-2">
+            <div className="space-y-0.5">
+              <h3 className="font-medium line-clamp-1">{title}</h3>
+              <p className="text-sm text-muted-foreground">{author}</p>
+              <p className="text-sm text-muted-foreground line-clamp-2">
+                {description}
+              </p>
+            </div>
+            <p className="text-xs italic text-muted-foreground">{note}</p>
+
+            <div className="flex items-center mt-1">
+              {pageNumber && (
+                <span className="text-xs bg-primary/10 text-primary py-1 px-2 rounded-full">
+                  Page {pageNumber}
+                </span>
+              )}
+              {favorite && (
+                <span className="ml-2 text-xs bg-amber-100 text-amber-700 px-0 py-0 rounded-full">
+                  Favorite
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+        {note && (
+          <p className="text-xs text-muted-foreground text-right">
+            Bookmarked on {dateBookmarked?.toString()}
           </p>
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
