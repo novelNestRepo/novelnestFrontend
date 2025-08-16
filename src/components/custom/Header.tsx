@@ -1,3 +1,5 @@
+"use client";
+
 import { Bell, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -10,8 +12,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 export default function Header() {
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <header className="flex items-center justify-between mb-8">
       <div className="relative">
@@ -47,45 +60,48 @@ export default function Header() {
           <Bell size={20} />
         </button>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            asChild
-            className="hover:bg-primary/8 active:bg-primary/8 p-2 rounded-4xl transition-all duration-100"
-          >
-            <div className="flex items-center gap-2 cursor-pointer">
-              <span className="text-sm font-medium">me@email.com</span>
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>
-                  {"me@email.com".substring(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="center" className="w-full">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href="/profile">Profile</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href="/settings">Settings</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-500 cursor-pointer">
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        {/* <div className="flex items-center gap-2">
+        {isAuthenticated ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              asChild
+              className="hover:bg-primary/8 active:bg-primary/8 p-2 rounded-4xl transition-all duration-100"
+            >
+              <div className="flex items-center gap-2 cursor-pointer">
+                <span className="text-sm font-medium">{user?.email}</span>
+                <Avatar>
+                  <AvatarImage src={`https://avatar.vercel.sh/${user?.email}`} />
+                  <AvatarFallback>
+                    {user?.email?.substring(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center" className="w-full">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href="/profile">Profile</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href="/settings">Settings</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-red-500 cursor-pointer" onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <div className="flex items-center gap-2">
             <Button variant="ghost" asChild>
               <Link href="/login">Login</Link>
             </Button>
             <Button asChild>
               <Link href="/register">Register</Link>
             </Button>
-          </div> */}
+          </div>
+        )}
       </div>
     </header>
   );

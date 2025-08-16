@@ -16,36 +16,28 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 import PageTitle from "@/components/custom/PageTitle";
-
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  cover: string;
-  description: string;
-  status: "reading" | "completed" | "to-read";
-}
+import { useBooks } from "@/lib/hooks/useBooks";
 
 export default function Books() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [books, setBooks] = useState<Book[]>([
-    {
-      id: "1",
-      title: "The Great Gatsby",
-      author: "F. Scott Fitzgerald",
-      cover:
-        "https://m.media-amazon.com/images/I/71FTb9X6wsL._AC_UF1000,1000_QL80_.jpg",
-      description:
-        "A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.",
-      status: "reading",
-    },
-  ]);
+  const { books, isLoading, createBook, isCreating } = useBooks();
 
   const filteredBooks = books.filter(
-    (book) =>
-      book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchQuery.toLowerCase())
+    (book: any) =>
+      book.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      book.author?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  if (isLoading) {
+    return (
+      <>
+        <PageTitle title="Books" icon={<BookOpen />} />
+        <div className="flex items-center justify-center h-64">
+          <div className="text-muted-foreground">Loading books...</div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -61,45 +53,51 @@ export default function Books() {
             className="w-[300px] bg-foreground/5 border-none rounded py-2 px-4 pl-10 text-sm outline-none focus-visible:ring-1 focus-visible:ring-primary/30"
           />
         </div>
-        <Button className="cursor-pointer">
+        <Button className="cursor-pointer" disabled={isCreating}>
           <Plus className="h-4 w-4" />
-          Add Book
+          {isCreating ? "Adding..." : "Add Book"}
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-        {filteredBooks.map((book) => (
-          <Card
-            key={book.id}
-            className="flex flex-col hover:ring-1 hover:ring-primary/30 gap-4 p-4 *:p-0"
-          >
-            <CardHeader>
-              <div className="aspect-[2/3] relative overflow-hidden rounded-lg mb-4">
-                <Image
-                  src={book.cover}
-                  alt={book.title}
-                  className="object-cover w-full h-full"
-                  width="200"
-                  height="300"
-                />
-              </div>
-              <CardTitle className="line-clamp-1">{book.title}</CardTitle>
-              <CardDescription>{book.author}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <p className="text-sm text-muted-foreground line-clamp-3">
-                {book.description}
-              </p>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <span className="text-sm font-medium capitalize">
-                {book.status}
-              </span>
-              <Button variant="link" className="cursor-pointer p-0">
-                View Details
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+        {filteredBooks.length === 0 ? (
+          <div className="col-span-full text-center py-8 text-muted-foreground">
+            No books found
+          </div>
+        ) : (
+          filteredBooks.map((book: any) => (
+            <Card
+              key={book.id}
+              className="flex flex-col hover:ring-1 hover:ring-primary/30 gap-4 p-4 *:p-0"
+            >
+              <CardHeader>
+                <div className="aspect-[2/3] relative overflow-hidden rounded-lg mb-4">
+                  <Image
+                    src={book.cover_url || book.coverUrl || "/placeholder-book.jpg"}
+                    alt={book.title || "Book cover"}
+                    className="object-cover w-full h-full"
+                    width="200"
+                    height="300"
+                  />
+                </div>
+                <CardTitle className="line-clamp-1">{book.title}</CardTitle>
+                <CardDescription>{book.author}</CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p className="text-sm text-muted-foreground line-clamp-3">
+                  {book.description}
+                </p>
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <span className="text-sm font-medium capitalize">
+                  {book.status || "unknown"}
+                </span>
+                <Button variant="link" className="cursor-pointer p-0">
+                  View Details
+                </Button>
+              </CardFooter>
+            </Card>
+          ))
+        )}
       </div>
     </>
   );
