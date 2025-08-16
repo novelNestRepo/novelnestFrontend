@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import Sidebar from "@/components/custom/Sidebar";
 import Header from "@/components/custom/Header";
+import QueryProvider from "@/lib/providers/QueryProvider";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
@@ -33,14 +34,16 @@ export default function RootLayout({
       <body
         className={`${playfairDisplay.variable} ${inter.variable} antialiased`}
       >
-        <TooltipProvider>
-          <Sidebar />
-          <main className="ml-24 flex flex-col py-4 px-8 *:w-full h-screen">
-            <Header />
-            {children}
-            <Toaster />
-          </main>
-        </TooltipProvider>
+        <QueryProvider>
+          <TooltipProvider>
+            <Sidebar />
+            <main className="ml-24 flex flex-col py-4 px-8 *:w-full h-screen">
+              <Header />
+              {children}
+              <Toaster />
+            </main>
+          </TooltipProvider>
+        </QueryProvider>
       </body>
     </html>
   );

@@ -3,7 +3,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-// import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/lib/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -32,95 +32,43 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Channel, Message } from "@/lib/types";
 import PageTitle from "@/components/custom/PageTitle";
-
-// Mock data for testing
-const mockUser = {
-  id: "user-1",
-  email: "you@example.com",
-  user_metadata: { name: "You" },
-};
-
-const mockChannels: Channel[] = [
-  { id: "channel-1", name: "General", description: "General discussion" },
-  { id: "channel-2", name: "Random", description: "Random chat" },
-  { id: "channel-3", name: "Tech Talk", description: "Technology discussions" },
-];
-
-const mockMessages: Message[] = [
-  {
-    id: "msg-1",
-    content: "Hey everyone! How's it going?",
-    sender_id: "user-2",
-    created_at: new Date(Date.now() - 300000).toISOString(),
-    updated_at: new Date(Date.now() - 300000).toISOString(),
-    status: "read",
-    reactions: { "👍": ["user-1"], "😄": ["user-3"] },
-    sender: {
-      email: "alice@example.com",
-      user_metadata: { name: "Alice" },
-    },
-  },
-  {
-    id: "msg-2",
-    content: "Pretty good! Working on some new features.",
-    sender_id: "user-1",
-    created_at: new Date(Date.now() - 240000).toISOString(),
-    updated_at: new Date(Date.now() - 240000).toISOString(),
-    status: "read",
-    reactions: {},
-    sender: mockUser,
-  },
-  {
-    id: "msg-3",
-    content: "This message was deleted",
-    sender_id: "user-3",
-    created_at: new Date(Date.now() - 180000).toISOString(),
-    updated_at: new Date(Date.now() - 180000).toISOString(),
-    status: "read",
-    reactions: {},
-    deleted: true,
-    sender: {
-      email: "bob@example.com",
-      user_metadata: { name: "Bob" },
-    },
-  },
-];
+import { useChannels, useChannelMessages, useMessages } from "@/lib/hooks/useMessages";
 
 export default function Messages() {
-  const user = mockUser; // Use mock user instead of useAuth
-  const [messages, setMessages] = useState<Message[]>(mockMessages);
-  const [channels, setChannels] = useState<Channel[]>(mockChannels);
-  const [selectedChannel, setSelectedChannel] = useState<string>("channel-1");
+  const { user, isAuthenticated } = useAuth();
+  const { data: channels = [], isLoading: channelsLoading } = useChannels();
+  const [selectedChannel, setSelectedChannel] = useState<string>("");
   const [newMessage, setNewMessage] = useState<string>("");
-  const [loading, setLoading] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
   const [editingMessage, setEditingMessage] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout>(null);
+  
+  const { data: messages = [], isLoading: messagesLoading } = useChannelMessages(selectedChannel);
+  const { sendMessage, editMessage, deleteMessage, addReaction, isSending } = useMessages(selectedChannel);
 
+  // Set first channel as default when channels load
   useEffect(() => {
-    // Mock initialization - no socket needed for testing
-    console.log("Mock chat initialized");
-    setLoading(false);
-    scrollToBottom();
-  }, []);
-
-  useEffect(() => {
-    if (selectedChannel) {
-      fetchMessages();
+    if (channels.length > 0 && !selectedChannel) {
+      setSelectedChannel(channels[0].id);
     }
-  }, [selectedChannel]);
+  }, [channels, selectedChannel]);
 
-  // Mock functions - no API calls needed
-  const fetchChannels = () => {
-    console.log("Mock: Channels already loaded");
-  };
+  if (!isAuthenticated) {
+    return (
+      <>
+        <PageTitle title="Messages" icon={<MessageSquare />} />
+        <div className="flex items-center justify-center h-64">
+          <div className="text-muted-foreground">Please log in to view messages</div>
+        </div>
+      </>
+    );
+  }
 
-  const fetchMessages = () => {
-    console.log("Mock: Messages already loaded for channel:", selectedChannel);
+  useEffect(() => {
     scrollToBottom();
-  };
+  }, [messages]);
 
   const scrollToBottom = () => {
     if (scrollRef.current) {
@@ -142,72 +90,37 @@ export default function Messages() {
     }, 2000);
   };
 
-  const sendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !user || !selectedChannel) return;
 
-    if (editingMessage) {
-      // Mock edit message
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === editingMessage
-            ? {
-                ...m,
-                content: newMessage,
-                updated_at: new Date().toISOString(),
-              }
-            : m
-        )
-      );
-      setEditingMessage(null);
-    } else {
-      // Mock send new message
-      const newMsg: Message = {
-        id: `msg-${Date.now()}`,
-        content: newMessage,
-        sender_id: user.id,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        status: "sent",
-        reactions: {},
-        sender: user,
-      };
-      setMessages((prev) => [...prev, newMsg]);
+    try {
+      if (editingMessage) {
+        await editMessage({ messageId: editingMessage, content: newMessage });
+        setEditingMessage(null);
+      } else {
+        await sendMessage(newMessage);
+      }
+      setNewMessage("");
+    } catch (error) {
+      console.error('Error sending message:', error);
     }
-    setNewMessage("");
-    scrollToBottom();
   };
 
-  const deleteMessage = (messageId: string) => {
-    // Mock delete message
-    setMessages((prev) =>
-      prev.map((m) => (m.id === messageId ? { ...m, deleted: true } : m))
-    );
+  const handleDeleteMessage = async (messageId: string) => {
+    try {
+      await deleteMessage(messageId);
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
   };
 
-  const addReaction = (messageId: string, emoji: string) => {
-    // Mock add reaction
-    setMessages((prev) =>
-      prev.map((m) => {
-        if (m.id === messageId) {
-          const reactions = { ...m.reactions };
-          if (reactions[emoji]) {
-            if (reactions[emoji].includes(user.id)) {
-              reactions[emoji] = reactions[emoji].filter(
-                (id) => id !== user.id
-              );
-              if (reactions[emoji].length === 0) delete reactions[emoji];
-            } else {
-              reactions[emoji].push(user.id);
-            }
-          } else {
-            reactions[emoji] = [user.id];
-          }
-          return { ...m, reactions };
-        }
-        return m;
-      })
-    );
+  const handleAddReaction = async (messageId: string, emoji: string) => {
+    try {
+      await addReaction({ messageId, emoji });
+    } catch (error) {
+      console.error('Error adding reaction:', error);
+    }
   };
 
   return (
@@ -233,7 +146,7 @@ export default function Messages() {
           className="grow h-full flex items-center justify-center"
           ref={scrollRef}
         >
-          {loading ? (
+          {messagesLoading ? (
             <div className="flex items-center justify-center mt-4">
               Loading messages...
             </div>
@@ -287,7 +200,7 @@ export default function Messages() {
                                 Edit
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                onClick={() => deleteMessage(message.id)}
+                                onClick={() => handleDeleteMessage(message.id)}
                                 className="group"
                               >
                                 <Trash2 className="mr-2 h-4 w-4 group-hover:text-background" />
@@ -320,7 +233,7 @@ export default function Messages() {
                               key={emoji}
                               variant="secondary"
                               className="cursor-pointer"
-                              onClick={() => addReaction(message.id, emoji)}
+                              onClick={() => handleAddReaction(message.id, emoji)}
                             >
                               {emoji} {userIds.length}
                             </Badge>
@@ -339,7 +252,7 @@ export default function Messages() {
             </div>
           )}
         </ScrollArea>
-        <form onSubmit={sendMessage} className="p-4 border-t">
+        <form onSubmit={handleSendMessage} className="p-4 border-t">
           <div className="flex gap-2">
             <Input
               value={newMessage}
@@ -349,9 +262,10 @@ export default function Messages() {
               }}
               placeholder="Type a message..."
               className="flex-1"
+              disabled={isSending}
             />
-            <Button type="submit" disabled={!newMessage.trim()}>
-              {editingMessage ? "Edit" : "Send"}
+            <Button type="submit" disabled={!newMessage.trim() || isSending}>
+              {isSending ? "Sending..." : editingMessage ? "Edit" : "Send"}
             </Button>
           </div>
         </form>
