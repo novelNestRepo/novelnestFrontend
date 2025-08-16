@@ -30,8 +30,7 @@ export default function Register() {
     
     try {
       await register({ email, password });
-      setSuccess("Registration successful! Please check your email to verify your account.");
-      setTimeout(() => router.push("/login"), 2000);
+      router.push("/check-email");
     } catch (err: any) {
       setError(err.message || "Registration failed");
     }

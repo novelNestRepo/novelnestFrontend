@@ -3,10 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import io from "socket.io-client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { MessagesSquare, Mic, MicOff, Users } from "lucide-react";
 import PageTitle from "@/components/custom/PageTitle";
-import { useVoiceChannel, useVoiceChannelActions } from "@/lib/hooks/useVoiceChannels";
+// import { useVoiceChannel, useVoiceChannelActions } from "@/lib/hooks/useVoiceChannels";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@/lib/api";
 import { useAuth } from "@/lib/hooks/useAuth";
 
 const SIGNALING_URL = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || "http://localhost:4000";
@@ -25,9 +27,15 @@ interface PeerConnection {
 const VoiceChannelRoom = () => {
   const params = useParams();
   const channelId = params.id as string;
-  const { user } = useAuth();
-  const { data: channel, isLoading } = useVoiceChannel(channelId);
-  const { joinChannel, leaveChannel, isJoining } = useVoiceChannelActions();
+  const { user, isLoading: authLoading } = useAuth();
+  const router = useRouter();
+  const { data: channel, isLoading } = useQuery({
+    queryKey: ['voice-channel', channelId],
+    queryFn: () => apiClient.getVoiceChannel(channelId),
+    enabled: !!channelId && !!user,
+  });
+  
+  const [isJoining, setIsJoining] = useState(false);
   
   const [error, setError] = useState<string | null>(null);
   const [inVoice, setInVoice] = useState(false);
@@ -40,9 +48,13 @@ const VoiceChannelRoom = () => {
   const peersRef = useRef<Map<string, PeerConnection>>(new Map());
   const audioElementsRef = useRef<Map<string, HTMLAudioElement>>(new Map());
   
-  const isChannelMember = channel?.channel_members?.some(
-    (member: any) => member.user_id === user?.id
-  );
+  const [isChannelMember, setIsChannelMember] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     return () => {
@@ -53,17 +65,22 @@ const VoiceChannelRoom = () => {
 
   const handleJoinChannel = async () => {
     if (!user || !channelId) return;
+    setIsJoining(true);
     try {
-      await joinChannel({ channelId, userId: user.id });
+      await apiClient.joinVoiceChannel(channelId, user.id);
+      setIsChannelMember(true);
     } catch (err: any) {
       setError(err.message || "Failed to join channel");
+    } finally {
+      setIsJoining(false);
     }
   };
 
   const handleLeaveChannel = async () => {
     if (!user || !channelId) return;
     try {
-      await leaveChannel({ channelId, userId: user.id });
+      await apiClient.leaveVoiceChannel(channelId, user.id);
+      setIsChannelMember(false);
       handleLeaveVoice();
     } catch (err: any) {
       setError(err.message || "Failed to leave channel");
@@ -111,14 +128,21 @@ const VoiceChannelRoom = () => {
   };
 
   const handleJoinVoice = async () => {
-    if (!user || !channelId) return;
+    if (!user || !channelId) {
+      console.log('Missing user or channelId:', { user: !!user, channelId });
+      return;
+    }
+    
+    console.log('Attempting to join voice chat...');
     setConnectingVoice(true);
     
     try {
+      console.log('Requesting microphone access...');
       // Get user media
       const localStream = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
+      console.log('Microphone access granted');
       localStreamRef.current = localStream;
 
       // Connect to signaling server
@@ -257,6 +281,8 @@ const VoiceChannelRoom = () => {
     }
   };
 
+  if (authLoading) return <div>Loading...</div>;
+  if (!user) return null;
   if (isLoading) return <div>Loading channel...</div>;
   if (!channel) return <div>Channel not found</div>;
 
@@ -275,11 +301,11 @@ const VoiceChannelRoom = () => {
           <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
             <span className="flex items-center gap-1">
               <Users className="w-4 h-4" />
-              {channel.channel_members?.length || 0} members
+              {isChannelMember ? '1' : '0'} members
             </span>
             <span className="flex items-center gap-1">
               <Mic className="w-4 h-4" />
-              {voiceUsers.length} in voice
+              {inVoice ? '1' : '0'} in voice
             </span>
           </div>
         </div>
@@ -319,6 +345,9 @@ const VoiceChannelRoom = () => {
                   </Button>
                   <Button variant="destructive" onClick={handleLeaveVoice}>
                     Leave Voice Chat
+                  </Button>
+                  <Button variant="outline" onClick={handleLeaveChannel}>
+                    Leave Channel
                   </Button>
                 </div>
 

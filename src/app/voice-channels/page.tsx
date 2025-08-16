@@ -1,16 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import PageTitle from "@/components/custom/PageTitle";
 import { MessagesSquare, Plus, Users, Mic } from "lucide-react";
-import { useVoiceChannels } from "@/lib/hooks/useVoiceChannels";
+// import { useVoiceChannels } from "@/lib/hooks/useVoiceChannels";
+import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 const VoiceChannels = () => {
-  const { data: channels, isLoading, refetch } = useVoiceChannels();
+  const { user, isLoading: authLoading } = useAuth();
+  const router = useRouter();
+  
+  const { data: channels, isLoading, refetch } = useQuery({
+    queryKey: ['voice-channels'],
+    queryFn: () => apiClient.getVoiceChannels(),
+    enabled: !!user,
+  });
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newChannel, setNewChannel] = useState({ name: "", description: "" });
   const [creating, setCreating] = useState(false);
@@ -21,10 +31,7 @@ const VoiceChannels = () => {
     
     setCreating(true);
     try {
-      await apiClient.request('/channel', {
-        method: 'POST',
-        body: JSON.stringify(newChannel)
-      });
+      await apiClient.createVoiceChannel(newChannel);
       setNewChannel({ name: "", description: "" });
       setShowCreateForm(false);
       refetch();
@@ -35,6 +42,14 @@ const VoiceChannels = () => {
     }
   };
 
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading) return <div>Loading...</div>;
+  if (!user) return null;
   if (isLoading) return <div>Loading channels...</div>;
 
   return (
@@ -89,11 +104,11 @@ const VoiceChannels = () => {
                 <div className="flex items-center gap-4 text-sm text-gray-500">
                   <span className="flex items-center gap-1">
                     <Users className="w-4 h-4" />
-                    {channel.channel_members?.[0]?.count || 0} members
+                    0 members
                   </span>
                   <span className="flex items-center gap-1">
                     <Mic className="w-4 h-4" />
-                    {channel.voice_sessions?.[0]?.count || 0} in voice
+                    0 in voice
                   </span>
                 </div>
               </div>
