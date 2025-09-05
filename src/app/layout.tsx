@@ -8,6 +8,9 @@ import { Toaster } from "@/components/ui/sonner";
 import Sidebar from "@/components/custom/Sidebar";
 import Header from "@/components/custom/Header";
 import QueryProvider from "@/lib/providers/QueryProvider";
+import Chatbot from "@/components/custom/Chatbot";
+import { BotMessageSquare } from "lucide-react";
+import ChatbotPopup from "@/components/custom/ChatbotPopup";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
@@ -32,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfairDisplay.variable} ${inter.variable} antialiased`}
+        className={`${playfairDisplay.variable} ${inter.variable} antialiased relative`}
       >
         <QueryProvider>
           <TooltipProvider>
@@ -42,6 +45,7 @@ export default function RootLayout({
               {children}
               <Toaster />
             </main>
+            <ChatbotPopup />
           </TooltipProvider>
         </QueryProvider>
       </body>

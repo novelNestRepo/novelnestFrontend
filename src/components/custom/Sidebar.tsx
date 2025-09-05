@@ -1,5 +1,3 @@
-// TODO: Responsive.
-
 "use client";
 
 import {
@@ -9,7 +7,7 @@ import {
   Bookmark,
   UserRound,
   Settings,
-  MessageSquare,
+  BotMessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
@@ -47,7 +45,7 @@ export default function Sidebar() {
     if (path.startsWith("/books")) return "books";
     if (path.startsWith("/history")) return "history";
     if (path.startsWith("/bookmarks")) return "bookmarks";
-    if (path.startsWith("/messages")) return "messages";
+    if (path.startsWith("/chatbot")) return "chatbot";
     if (path.startsWith("/profile")) return "profile";
     if (path.startsWith("/settings")) return "settings";
     return "";
@@ -57,7 +55,7 @@ export default function Sidebar() {
   const books = () => router.push("/books");
   const history = () => router.push("/history");
   const bookmarks = () => router.push("/bookmarks");
-  const messages = () => router.push("/messages");
+  const chatbot = () => router.push("/chatbot");
   const settings = () => router.push("/settings");
 
   return (
@@ -93,9 +91,9 @@ export default function Sidebar() {
           onClick={bookmarks}
         />
         <SidebarItem
-          icon={MessageSquare}
-          active={getActiveItem() === "messages"}
-          onClick={messages}
+          icon={BotMessageSquare}
+          active={getActiveItem() === "chatbot"}
+          onClick={chatbot}
         />
         <SidebarItem
           icon={UserRound}
