@@ -18,9 +18,15 @@ export default function Home() {
           coverImage="/book-cover.jpg"
           description="Wow! you've delved deep into the wizarding world's secrets. Have Harry's parents died yet? Oops, looks like you're not there yet. Get reading now!"
         />
+        <PopularBooks />
+        <NewSeries />
       </div>
 
-      <div className="flex-1/4 border-l border-foreground/10 pl-10"></div>
+      <div className="flex-1/4 border-l border-foreground/10 pl-10">
+        <FeaturedBook />
+        <ReadingSchedule />
+        <ReaderFriends />
+      </div>
     </div>
   );
 }
