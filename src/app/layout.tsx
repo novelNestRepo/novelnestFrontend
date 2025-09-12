@@ -40,7 +40,7 @@ export default function RootLayout({
         <QueryProvider>
           <TooltipProvider>
             <Sidebar />
-            <main className="ml-24 flex flex-col py-4 px-8 *:w-full h-screen">
+            <main className="ml-16 lg:ml-24 flex flex-col py-4 px-4 lg:px-8 *:w-full h-screen">
               <Header />
               {children}
               <Toaster />
