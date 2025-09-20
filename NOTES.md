@@ -1,0 +1,1 @@
+- Chatbot icon is not responsive, and overflows.

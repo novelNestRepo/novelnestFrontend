@@ -30,7 +30,7 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between mb-8">
       <Button
-        className="lg:hidden rounded-full py-6"
+        className="lg:hidden rounded-full p-5"
         onClick={() => setSearchOpen((prev) => !prev)}
       >
         <svg
@@ -48,7 +48,7 @@ export default function Header() {
           ></path>
         </svg>
       </Button>
-      <div className="hidden lg:block relative w-[300px]">
+      <div className="hidden lg:block relative w-[25%]">
         <input
           type="search"
           placeholder="Search book name, author, edition..."
@@ -74,7 +74,7 @@ export default function Header() {
         placeholder="Search book name, author, edition..."
         className={`${
           searchOpen ? "block" : "hidden"
-        } bg-foreground/5 border-none rounded-full p-3.5 text-sm outline-none focus:none`}
+        } bg-foreground/5 border-none rounded-full px-4 py-2.5 text-sm outline-none focus:none w-full ms-2`}
       />
       <div className={`${searchOpen ? "hidden" : ""} flex items-center`}>
         <Button variant="ghost" className="hidden lg:block">

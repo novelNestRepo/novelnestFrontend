@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "../ui/button";
 
 const daysOfWeek = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
 const dates = [19, 20, 21, 22, 23, 24, 25];
@@ -9,11 +10,14 @@ export default function ReadingSchedule() {
   const [selectedDate, setSelectedDate] = useState(19);
 
   return (
-    <div className="mb-12">
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
         <h2 className="text-2xl font-playfair">Schedule Reading</h2>
-        <div className="flex space-x-2">
-          <button className="p-1 rounded-full border border-foreground/20">
+        <div className="flex gap-1">
+          <Button
+            variant="ghost"
+            className="rounded-full border border-foreground/25"
+          >
             <svg
               width="20"
               height="20"
@@ -29,8 +33,11 @@ export default function ReadingSchedule() {
                 d="M9 5l7 7-7 7"
               />
             </svg>
-          </button>
-          <button className="p-1 rounded-full border border-foreground/20">
+          </Button>
+          <Button
+            variant="ghost"
+            className="rounded-full border border-foreground/25"
+          >
             <svg
               width="20"
               height="20"
@@ -45,17 +52,17 @@ export default function ReadingSchedule() {
                 d="M9 5l7 7-7 7"
               />
             </svg>
-          </button>
+          </Button>
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between">
         {daysOfWeek.map((day, index) => (
           <div key={day} className="flex flex-col items-center">
             <span className="text-sm text-foreground/70 mb-2">{day}</span>
             <button
               className={`
-                w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
+                w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium cursor-pointer
                 ${
                   selectedDate === dates[index]
                     ? "bg-primary text-primary-foreground"

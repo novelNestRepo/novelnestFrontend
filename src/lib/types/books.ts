@@ -9,4 +9,6 @@ export interface Book {
   favorite?: boolean;
   recent?: boolean;
   note?: string;
+  series?: string;
+  volume?: string;
 }
