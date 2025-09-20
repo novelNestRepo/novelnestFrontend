@@ -19,7 +19,7 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    
+
     try {
       await login({ email, password });
       router.push("/");
@@ -29,14 +29,14 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="flex items-center justify-center h-full">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Login to NovelNest</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -46,7 +46,7 @@ export default function Login() {
                 required
               />
             </div>
-            <div>
+            <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
@@ -56,14 +56,16 @@ export default function Login() {
                 required
               />
             </div>
-            {error && (
-              <div className="text-red-500 text-sm">{error}</div>
-            )}
-            <Button type="submit" className="w-full" disabled={isLoginLoading}>
+            {error && <div className="text-red-500 text-sm">{error}</div>}
+            <Button
+              type="submit"
+              className="w-full mb-2"
+              disabled={isLoginLoading}
+            >
               {isLoginLoading ? "Logging in..." : "Login"}
             </Button>
           </form>
-          <div className="mt-4 text-center text-sm">
+          <div className="text-center text-sm">
             Don't have an account?{" "}
             <Link href="/register" className="text-primary hover:underline">
               Register

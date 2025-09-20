@@ -26,7 +26,7 @@ const SidebarItem = ({
   <button
     onClick={onClick}
     className={cn(
-      "flex items-center justify-center w-12 h-12 rounded-full mt-4 transition-all cursor-pointer",
+      "flex items-center justify-center w-12 h-12 rounded-full mt-2 lg:mt-4 transition-all cursor-pointer",
       active
         ? "bg-primary/20 text-primary"
         : "text-foreground/60 hover:text-foreground hover:bg-foreground/10"
@@ -59,8 +59,8 @@ export default function Sidebar() {
   const settings = () => router.push("/settings");
 
   return (
-    <div className="fixed left-0 top-0 bottom-0 w-[96px] flex flex-col items-center justify-center py-4 bg-background border-r border-border">
-      <Link href="/">
+    <div className="fixed left-0 top-0 bottom-0 w-[64px] lg:w-[96px] flex flex-col items-center justify-center py-4 bg-background border-r border-border">
+      <Link href="/" className="w-[48px] lg:w-[64px]">
         <Image
           src="/novelnest.png"
           width="64"
@@ -69,7 +69,7 @@ export default function Sidebar() {
           className="cursor-pointer"
         />
       </Link>
-      <div className="flex flex-col items-center flex-1">
+      <div className="flex flex-col items-center flex-1 mt-2">
         <SidebarItem
           icon={Home}
           active={getActiveItem() === "home"}
