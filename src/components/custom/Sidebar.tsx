@@ -57,6 +57,7 @@ export default function Sidebar() {
   const bookmarks = () => router.push("/bookmarks");
   const chatbot = () => router.push("/chatbot");
   const settings = () => router.push("/settings");
+  const profile = () => router.push("/profile");
 
   return (
     <div className="fixed left-0 top-0 bottom-0 w-[64px] lg:w-[96px] flex flex-col items-center justify-center py-4 bg-background border-r border-border">
@@ -98,7 +99,7 @@ export default function Sidebar() {
         <SidebarItem
           icon={UserRound}
           active={getActiveItem() === "profile"}
-          onClick={() => router.push("/profile")}
+          onClick={profile}
         />
       </div>
       <div>
