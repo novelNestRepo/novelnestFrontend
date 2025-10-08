@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { useState } from "react";
+import { Input } from "../ui/input";
 
 export default function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -49,13 +50,13 @@ export default function Header() {
         </svg>
       </Button>
       <div className="hidden lg:block relative w-[25%]">
-        <input
+        <Input
           type="search"
           placeholder="Search book name, author, edition..."
-          className="lg:w-full bg-foreground/5 border-none rounded-full p-4 pl-10 text-sm outline-none focus:ring-1 focus:ring-primary/30"
+          className="lg:w-full bg-foreground/5 border-none rounded-full h-12 pl-10 text-sm outline-none focus:ring-1 focus:ring-primary/30"
         />
         <svg
-          className="absolute left-3 top-4.5 w-4 h-4 text-foreground/50"
+          className="absolute left-3 top-4 w-4 h-4 text-foreground/50"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -69,14 +70,14 @@ export default function Header() {
           ></path>
         </svg>
       </div>
-      <input
+      <Input
         type="search"
         placeholder="Search book name, author, edition..."
         className={`${
           searchOpen ? "block" : "hidden"
-        } bg-foreground/5 border-none rounded-full px-4 py-2.5 text-sm outline-none focus:none w-full ms-2`}
+        } lg:w-full h-12 pl-10 focus:ring-1 focus:ring-primary/30 bg-foreground/5 border-none rounded-full px-4 py-2.5 text-sm outline-none focus:none w-full ms-2`}
       />
-      <div className={`${searchOpen ? "hidden" : ""} flex items-center`}>
+      <div className={`${searchOpen ? "hidden" : "h-12"} flex items-center`}>
         <Button variant="ghost" className="hidden lg:block">
           <Link
             href="/voice-channels"

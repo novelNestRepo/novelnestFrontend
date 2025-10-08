@@ -1,24 +1,29 @@
 import React from "react";
 import { Book } from "@/lib/types";
-import BookCard from "./BookCard";
+import LibraryBookCard from "./LibraryBookCard";
 
-const ProfileBooksGrid = ({ content }: { content: Book[] }) => {
+const BooksGrid = ({ content }: { content: Book[] }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {content.map((book) => (
-        <BookCard
-          key={book.id}
-          title={book.title}
-          author={book.author}
-          coverUrl={book.coverUrl}
-          pageNumber={book.pageNumber}
-          dateBookmarked={book.dateBookmarked}
-          note={book.note}
-          description={book.description}
-        />
+        <LibraryBookCard key={book.id} book={book} />
       ))}
     </div>
   );
+};
+
+const ProfileBooksGrid = ({ books, tab }: { books: Book[]; tab: string }) => {
+  const filteredBooks = books.filter((book) => book.status === tab);
+
+  if (filteredBooks.length === 0) {
+    return (
+      <div className="text-center py-8 text-muted-foreground">
+        No books in this category yet.
+      </div>
+    );
+  }
+
+  return <BooksGrid content={filteredBooks} />;
 };
 
 export default ProfileBooksGrid;

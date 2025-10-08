@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 
 const featuredBook: Book = {
-  coverUrl:
+  cover_url:
     "https://images.unsplash.com/photo-1618666012174-83b441c0bc76?q=80&w=1000",
   title: "Chamber of Secrets",
 };
@@ -30,9 +30,9 @@ export default function FeaturedBook() {
           </p>
         </div>
 
-        {featuredBook.coverUrl && (
+        {featuredBook.cover_url && (
           <Image
-            src={featuredBook.coverUrl}
+            src={featuredBook.cover_url}
             alt={featuredBook.title || ""}
             className="flex-1 aspect-[2/3] object-cover rounded shadow max-w-[100px]"
             width="200"

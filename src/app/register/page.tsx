@@ -22,12 +22,12 @@ export default function Register() {
     e.preventDefault();
     setError("");
     setSuccess("");
-    
+
     if (password !== confirmPassword) {
       setError("Passwords don't match");
       return;
     }
-    
+
     try {
       await register({ email, password });
       router.push("/check-email");
@@ -37,7 +37,7 @@ export default function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="flex items-center justify-center h-full">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Join NovelNest</CardTitle>
@@ -74,13 +74,13 @@ export default function Register() {
                 required
               />
             </div>
-            {error && (
-              <div className="text-red-500 text-sm">{error}</div>
-            )}
-            {success && (
-              <div className="text-green-500 text-sm">{success}</div>
-            )}
-            <Button type="submit" className="w-full" disabled={isRegisterLoading}>
+            {error && <div className="text-red-500 text-sm">{error}</div>}
+            {success && <div className="text-green-500 text-sm">{success}</div>}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isRegisterLoading}
+            >
               {isRegisterLoading ? "Creating account..." : "Register"}
             </Button>
           </form>

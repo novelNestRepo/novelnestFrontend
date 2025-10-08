@@ -4,7 +4,6 @@
 "use client";
 
 import BookmarkedBooksGrid from "@/components/custom/BookmarkedBooksGrid";
-import BooksGrid from "@/components/custom/BooksGrid";
 import PageTitle from "@/components/custom/PageTitle";
 import {
   Pagination,
@@ -27,7 +26,7 @@ const page = () => {
       id: "1",
       title: "The Adventures of Sherlock Holmes",
       author: "Arthur Conan Doyle",
-      coverUrl: "https://m.media-amazon.com/images/I/71tvs98+5vL.jpg",
+      cover_url: "https://m.media-amazon.com/images/I/71tvs98+5vL.jpg",
       pageNumber: 143,
       dateBookmarked: "May 10, 2025",
       note: "The part where Holmes deduces the client's profession just from a hat",
@@ -37,7 +36,7 @@ const page = () => {
       id: "2",
       title: "Fire & Blood",
       author: "George R.R. Martin",
-      coverUrl:
+      cover_url:
         "https://upload.wikimedia.org/wikipedia/en/c/c2/Fire_%26_Blood_%282018%29_hardcover.jpg",
       pageNumber: 267,
       dateBookmarked: "May 8, 2025",
@@ -48,7 +47,7 @@ const page = () => {
       id: "3",
       title: "The Midnight Library",
       author: "Matt Haig",
-      coverUrl:
+      cover_url:
         "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1602190253i/52578297.jpg",
       pageNumber: 89,
       dateBookmarked: "May 5, 2025",
@@ -59,7 +58,7 @@ const page = () => {
       id: "4",
       title: "The Philosopher's Stone",
       author: "J.K. Rowling",
-      coverUrl:
+      cover_url:
         "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg",
       pageNumber: 112,
       dateBookmarked: "April 29, 2025",
@@ -70,7 +69,7 @@ const page = () => {
       id: "5",
       title: "A Game of Thrones",
       author: "George R.R. Martin",
-      coverUrl:
+      cover_url:
         "https://m.media-amazon.com/images/I/91dSMhdIzTL._AC_UF1000,1000_QL80_.jpg",
       pageNumber: 211,
       dateBookmarked: "April 25, 2025",
@@ -80,7 +79,7 @@ const page = () => {
       id: "6",
       title: "The Hobbit",
       author: "J.R.R. Tolkien",
-      coverUrl:
+      cover_url:
         "https://m.media-amazon.com/images/I/710+HcoP38L._AC_UF1000,1000_QL80_.jpg",
       pageNumber: 86,
       dateBookmarked: "April 20, 2025",
@@ -89,10 +88,10 @@ const page = () => {
   ];
 
   return (
-    <>
+    <div className="pb-4">
       <PageTitle title="Bookmarks" icon={<Bookmark />} />
       <Tabs defaultValue="all" className="w-full" onValueChange={setActiveTab}>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col lg:flex-row gap-2 items-center justify-between">
           <p className="text-muted-foreground">
             Save your favorite pages and chapters for quick access.
           </p>
@@ -134,7 +133,7 @@ const page = () => {
           </Pagination>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 };
 

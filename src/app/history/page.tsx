@@ -23,15 +23,59 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ReadingHistory } from "@/lib/types";
+
+const readingHistory: ReadingHistory[] = [
+  {
+    date: "2025-05-15",
+    title: "The Midnight Library",
+    pages_read: 12,
+    time_spent: "45 minutes",
+  },
+  {
+    date: "2025-05-14",
+    title: "Fire & Blood",
+    pages_read: 24,
+    time_spent: "1 hour 20 minutes",
+  },
+  {
+    date: "2025-05-14",
+    title: "The Chambers of Secrets",
+    pages_read: 8,
+    time_spent: "30 minutes",
+  },
+  {
+    date: "2025-05-13",
+    title: "The Midnight Library",
+    pages_read: 15,
+    time_spent: "55 minutes",
+  },
+  {
+    date: "2025-05-12",
+    title: "Fire & Blood",
+    pages_read: 18,
+    time_spent: "1 hour",
+  },
+  {
+    date: "2025-05-11",
+    title: "The Chambers of Secrets",
+    pages_read: 22,
+    time_spent: "1 hour 10 minutes",
+  },
+  {
+    date: "2025-05-10",
+    title: "The Midnight Library",
+    pages_read: 14,
+    time_spent: "50 minutes",
+  },
+];
 
 const History = () => {
   const [view, setView] = useState("timeline");
 
   return (
-    <>
+    <div className="pb-4">
       <PageTitle title="Reading History" icon={<Clock />} />
-
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <Card>
           <CardContent className="p-4 flex flex-col items-center justify-center">
@@ -91,48 +135,14 @@ const History = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">May 15, 2025</TableCell>
-                <TableCell>The Midnight Library</TableCell>
-                <TableCell>12 pages</TableCell>
-                <TableCell>45 minutes</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">May 14, 2025</TableCell>
-                <TableCell>Fire & Blood</TableCell>
-                <TableCell>24 pages</TableCell>
-                <TableCell>1 hour 20 minutes</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">May 14, 2025</TableCell>
-                <TableCell>The Chambers of Secrets</TableCell>
-                <TableCell>8 pages</TableCell>
-                <TableCell>30 minutes</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">May 13, 2025</TableCell>
-                <TableCell>The Midnight Library</TableCell>
-                <TableCell>15 pages</TableCell>
-                <TableCell>55 minutes</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">May 12, 2025</TableCell>
-                <TableCell>Fire & Blood</TableCell>
-                <TableCell>18 pages</TableCell>
-                <TableCell>1 hour</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">May 11, 2025</TableCell>
-                <TableCell>The Chambers of Secrets</TableCell>
-                <TableCell>22 pages</TableCell>
-                <TableCell>1 hour 10 minutes</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">May 10, 2025</TableCell>
-                <TableCell>The Midnight Library</TableCell>
-                <TableCell>14 pages</TableCell>
-                <TableCell>50 minutes</TableCell>
-              </TableRow>
+              {readingHistory.map((book) => (
+                <TableRow key={book.date}>
+                  <TableCell className="font-medium">{book.date}</TableCell>
+                  <TableCell>{book.title}</TableCell>
+                  <TableCell>{book.pages_read} pages</TableCell>
+                  <TableCell>{book.time_spent}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
 
@@ -142,15 +152,15 @@ const History = () => {
                 <PaginationPrevious href="#" />
               </PaginationItem>
               <PaginationItem>
-                <PaginationLink href="#" isActive>
+                <PaginationLink href="?page=1" isActive>
                   1
                 </PaginationLink>
               </PaginationItem>
               <PaginationItem>
-                <PaginationLink href="#">2</PaginationLink>
+                <PaginationLink href="?page=2">2</PaginationLink>
               </PaginationItem>
               <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
+                <PaginationLink href="?page=3">3</PaginationLink>
               </PaginationItem>
               <PaginationItem>
                 <PaginationNext href="#" />
@@ -159,7 +169,7 @@ const History = () => {
           </Pagination>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 };
 

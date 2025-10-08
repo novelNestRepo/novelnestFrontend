@@ -13,13 +13,13 @@ const ChatbotPopup = () => {
   return (
     <div className="relative">
       <button
-        className="fixed rounded-full bg-primary hover:bg-accent w-[8vh] h-[8vh] bottom-[2.5vh] right-[2vh] z-50 flex justify-center items-center cursor-pointer duration-200"
+        className="fixed rounded-full bg-primary hover:bg-accent w-16 h-16 bottom-4 right-4 z-50 flex justify-center items-center cursor-pointer duration-200"
         onClick={() => setChatbotOpen((prev) => !prev)}
       >
-        <BotMessageSquare size="24" color="white" />
+        <BotMessageSquare className="w-8 h-8" color="white" />
       </button>
       {chatbotOpen && (
-        <div className="fixed bottom-[12.5vh] right-4 w-[25vw] h-[75vh]">
+        <div className="fixed bottom-24 right-4 w-[75%] h-[75%] lg:w-[25%] lg:h-[75%]">
           <Chatbot version="popup" />
         </div>
       )}
